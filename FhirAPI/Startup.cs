@@ -1,3 +1,4 @@
+using Hl7.Fhir.Rest;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -32,6 +33,8 @@ namespace FhirAPI
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "FhirAPI", Version = "v1" });
             });
+
+            services.AddScoped(client => new FhirClient("http://hapi.fhir.org/baseDstu3"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

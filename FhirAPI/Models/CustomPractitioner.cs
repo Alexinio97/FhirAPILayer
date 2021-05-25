@@ -5,8 +5,7 @@ using System.Threading.Tasks;
 
 namespace FhirAPI.Models
 {
-    // wrapper class on Fhir.Patient
-    public class CustomPatient
+    public class CustomPractitioner
     {
         public string Id { get; set; }
         public string Name { get; set; }

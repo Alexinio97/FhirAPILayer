@@ -14,16 +14,14 @@ namespace FhirAPI.Controllers
     [Route("api/patients")]
     public class PatientController : Controller
     {
-        private static readonly string BASEURL = "http://hapi.fhir.org/baseDstu3";
-        private readonly FhirClient _client;
-
-        public PatientController()
+        private readonly string BASEURL = "http://hapi.fhir.org/baseDstu3";
+        FhirClient _client;
+        public PatientController(FhirClient client)
         {
-            _client = new FhirClient(BASEURL);
+            _client = client;
             // fhir client settings
             _client.Settings.PreferredFormat = ResourceFormat.Json;
             _client.Settings.PreferredReturn = Prefer.ReturnRepresentation;
-
         }
 
         [HttpGet]
@@ -43,7 +41,8 @@ namespace FhirAPI.Controllers
                     var customPatient = new CustomPatient()
                     {
                         Name = patientRetrieved.Name.FirstOrDefault().Family,
-                        FirstNames = patientRetrieved.Name.FirstOrDefault().Given.ToList()
+                        FirstNames = patientRetrieved.Name.FirstOrDefault().Given.ToList(),
+                        Id = patientRetrieved.Id
                     };
                     patientList.Add(customPatient);
                 }
@@ -58,7 +57,7 @@ namespace FhirAPI.Controllers
         public async Task<ActionResult> GetPatientByIdAsync(int id)
         {
             var patient = await _client.ReadAsync<Patient>($"Patient/{id}");
-
+            
             if (patient == null)
             {
                 return NotFound();
